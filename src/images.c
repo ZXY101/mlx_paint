@@ -6,7 +6,7 @@
 /*   By: stenner <stenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 12:45:17 by stenner           #+#    #+#             */
-/*   Updated: 2019/07/03 15:30:52 by stenner          ###   ########.fr       */
+/*   Updated: 2019/08/12 13:48:14 by stenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ void	pixel_put_image(t_mlx_image *img, int colour, int x, int y)
 		return ;
 	data = (int*)&img->raw_data[x * 4 + y * img->size_line];
 	*data = colour;
+}
+
+
+unsigned int	get_colour_image(t_mlx_image *img, int x, int y)
+{
+	unsigned int *data;
+
+	if (x >= img->width || x < 0)
+		return (0);
+	if (y >= img->height || y < 0)
+		return (0);
+	data = (unsigned int*)&img->raw_data[x * 4 + y * img->size_line];
+	return (*data);
 }
 
 /*
@@ -70,8 +83,8 @@ void	init_image(t_environment *env, t_mlx_image *img, int width, int height)
 **Puts the image onto the window
 */
 
-void	put_image(t_environment *env, t_mlx_image *img)
+void	put_image(t_environment *env, void* win_ptr, t_mlx_image *img)
 {
-	mlx_put_image_to_window(env->mlx_ptr, env->win_ptr, img->img_ptr,
+	mlx_put_image_to_window(env->mlx_ptr, win_ptr, img->img_ptr,
 	img->pos.x, img->pos.y);
 }

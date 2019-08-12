@@ -6,7 +6,7 @@
 /*   By: stenner <stenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 11:26:45 by stenner           #+#    #+#             */
-/*   Updated: 2019/07/17 11:44:11 by stenner          ###   ########.fr       */
+/*   Updated: 2019/08/12 10:59:04 by stenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,17 @@ static void	draw_line_upper(t_coord c1, t_coord c2, t_mlx_image *img, t_rgb c)
 		(c1.x + i * l.grad) + 1, c1.y + i);
 		i++;
 	}
+}
+
+void		draw_line(t_coord c1, t_coord c2, t_mlx_image *img, t_rgb rgb)
+{
+	int			delta_x;
+	int			delta_y;
+
+	delta_x = c2.x - c1.x;
+	delta_y = c2.y - c1.y;
+	if (abs(delta_x) < abs(delta_y))
+		draw_line_upper(c1, c2, img, rgb);
+	else
+		draw_line_lower(c1, c2, img, rgb);
 }

@@ -29,10 +29,10 @@ $(LIBFT_PATH)libft.a:
 	@make -C $(LIBFT_PATH)
 
 $(NAME): $(SRCO) $(LIBFT_PATH)libft.a 
-	@gcc $(FLAGS) $(SRCO) -L $(LIBFT_PATH) -lft -o $(NAME) $(MLX_LFLAGS)
+	@gcc $(FLAGS) $(SRCO) -L $(LIBFT_PATH) -lft -o $(NAME) $(MLX_FLAGS)
 	@echo "\033[32mBinary \033[1;32m$(NAME)\033[1;0m\033[32m Created.\033[0m"
 
-$(SRC_PATH)%.o: $(SRC_PATH)%.c includes/fdf.h
+$(SRC_PATH)%.o: $(SRC_PATH)%.c includes/mlx_paint.h
 	@gcc $(FLAGS) -c $< -o $@
 
 clean:
