@@ -6,7 +6,7 @@
 /*   By: stenner <stenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 11:59:01 by stenner           #+#    #+#             */
-/*   Updated: 2019/08/12 15:32:34 by stenner          ###   ########.fr       */
+/*   Updated: 2019/08/16 12:27:29 by stenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int		mouse_move(int x, int y, t_environment *env)
 		FILL_COORD(env->a, env->ox, env->oy);
 		FILL_COORD(env->b, x, y);
 		draw_line(env->a, env->b, &env->img, env->rgb);
-		put_image(env, env->win_ptr, &env->img);
 		env->ox = x;
 		env->oy = y;
 	}
@@ -99,7 +98,6 @@ int		mouse_move(int x, int y, t_environment *env)
 		FILL_COORD(env->a, env->ox, env->oy);
 		FILL_COORD(env->b, x, y);
 		draw_line(env->a, env->b, &env->img, env->black);
-		put_image(env, env->win_ptr, &env->img);
 		env->ox = x;
 		env->oy = y;
 	}

@@ -6,7 +6,7 @@
 /*   By: stenner <stenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 11:13:27 by stenner           #+#    #+#             */
-/*   Updated: 2019/08/12 15:46:23 by stenner          ###   ########.fr       */
+/*   Updated: 2019/08/16 12:20:22 by stenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,73 +42,49 @@ t_rgb	itorgb(unsigned int colour)
 	return (rgb);
 }
 
-void ff(t_environment *env, t_coord begin, unsigned int colour, t_rgb rgb)
+t_coord	stack[1000000];
+int		top = -1;
+
+
+void push(t_coord x)
 {
-	t_coord points[4];
-
-	points[0].y = begin.y + 1;
-	points[0].x = begin.x;
-
-	points[1].y = begin.y - 1;
-	points[1].x = begin.x;
-
-	points[2].y = begin.y;
-	points[2].x = begin.x + 1;
-
-	points[3].y = begin.y;
-	points[3].x = begin.x - 1;
-
-	if (begin.x >= 0 && begin.y >= 0 && begin.x < env->length && begin.y < env->height)
-	{
-		if (get_colour_image(&env->img, begin.x, begin.y) != colour || get_colour_image(&env->img, begin.x, begin.y) == rgbtoi(rgb.r, rgb.g, rgb.b))
-			return ;
-		pixel_put_image(&env->img, rgbtoi(rgb.r, rgb.g, rgb.b), begin.x, begin.y);
-		//ff(env, points[0], colour, rgb);
-		ff(env, points[1], colour, rgb);
-		ff(env, points[2], colour, rgb); 
-		ff(env, points[3], colour, rgb);
-	}
+	stack[++top] = x; 
 }
 
-void ff2(t_environment *env, t_coord begin, unsigned int colour, t_rgb rgb)
+t_coord pop()
 {
-	t_coord points[4];
+	return stack[top--];
+}
 
-	points[0].y = begin.y + 1;
-	points[0].x = begin.x;
-
-	points[1].y = begin.y - 1;
-	points[1].x = begin.x;
-
-	points[2].y = begin.y;
-	points[2].x = begin.x + 1;
-
-	points[3].y = begin.y;
-	points[3].x = begin.x - 1;
-
-	if (begin.x >= 0 && begin.y >= 0 && begin.x < env->length && begin.y < env->height)
-	{
-		if (get_colour_image(&env->img, begin.x, begin.y) != colour || get_colour_image(&env->img, begin.x, begin.y) == rgbtoi(rgb.r, rgb.g, rgb.b))
-			return ;
-		pixel_put_image(&env->img, rgbtoi(rgb.r, rgb.g, rgb.b), begin.x, begin.y);
-		ff2(env, points[0], colour, rgb);
-		//ff(env, points[1], colour, rgb);
-		ff2(env, points[2], colour, rgb); 
-		ff2(env, points[3], colour, rgb);
-	}
+int	is_empty()
+{
+	return (top == -1);
 }
 
 void flood_fill(t_environment *env, t_coord begin, t_rgb rgb, t_rgb replace)
 {
-	unsigned int colour;
-	t_coord point;
-	t_coord begin2;
-	(void)point;
-	(void)replace;
-	FILL_COORD(begin2, begin.x, begin.y +1);
-	colour = get_colour_image(&env->img, begin.x, begin.y);
-	ff(env, begin, colour, rgb);
-	ff2(env, begin2, colour, rgb);
+	static const int dx[4] = {0, 1, 0, -1};
+	static const int dy[4] = {-1, 0, 1, 0};
+
+	if (rgbtoi(rgb.r, rgb.g, rgb.b) == rgbtoi(replace.r, replace.g, replace.b))
+		return;
+	push(begin);
+	while (!is_empty())
+	{
+		t_coord p;
+		p = pop();
+		pixel_put_image(&env->img, rgbtoi(rgb.r, rgb.g, rgb.b), p.x, p.y);
+		for (int i = 0; i < 4; i++)
+		{
+			t_coord np;
+			np.x = p.x + dx[i];
+			np.y = p.y + dy[i];
+			if (np.x >= 0 && np.x < env->length && np.y >= 0 && np.y < env->height && get_colour_image(&env->img, np.x, np.y) ==  rgbtoi(replace.r, replace.g, replace.b))
+			{
+				push(np);
+			}
+		}
+	}
 
 
 }
